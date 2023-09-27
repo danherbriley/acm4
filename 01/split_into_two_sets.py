@@ -1,58 +1,66 @@
 
 
-class BitSet:
-    value: int
-
-    def __init__(self, value):
-        self.value = value
-
-    def add(self, value):
-        self.value += value
-
-
-def determine_result(dominoes: list, idx: int, first: BitSet, second: BitSet) -> bool:
-    if idx >= len(dominoes):
-        return True
-
-    a, b = dominoes[idx]
-    if a == b:
-        return False
-
-    # a = a - 1
-    # b = b - 1
-    a_shifted = (1 << a)
-    b_shifted = (1 << b)
-    if first.value & a_shifted == a_shifted or first.value & b_shifted == b_shifted:
-        if second.value & a_shifted == a_shifted or second.value & b_shifted == b_shifted:
+def determine_bfs(start, edges, seen):
+    found_vertices = 0
+    previous = -1
+    current = start
+    while current != start or previous == -1:
+        if current not in edges:
             return False
-        second.add(a_shifted + b_shifted)
-        return determine_result(dominoes, idx + 1, first, second)
-    elif second.value & a_shifted == a_shifted or second.value & b_shifted == b_shifted:
-        first.add(a_shifted + b_shifted)
-        return determine_result(dominoes, idx + 1, first, second)
-    else:
-        # a, b both not in first or second sets
-        first_value = first.value
-        second_value = second.value
-        return determine_result(dominoes, idx + 1, BitSet(first_value + a_shifted + b_shifted), second) \
-            or determine_result(dominoes, idx + 1, first, BitSet(second_value + a_shifted + b_shifted))
+        seen.add(current)
+        found_vertices += 1
+        tmp = previous
+        previous = current
+        current = edges[current][0] if edges[current][0] != tmp else edges[current][1]
+    if found_vertices % 2 == 0:
+        return True
+    return False
+
+
+def determine_result(n, edges):
+    seen = set()
+    for i in range(n):
+        if (i + 1) not in seen:
+            res = determine_bfs(i + 1, edges, seen)
+            if not res:
+                return False
+    return True
 
 
 if __name__ == '__main__':
     for _ in range(int(input())):
         n = int(input())
-        dominoes = []
+        edges = {}
         is_possible = True
+        correct_numbers = 0
         for _ in range(n):
-            aa, bb = tuple(int(x) for x in input().split())
-            if aa == bb:
+            a, b = tuple(int(x) for x in input().split())
+            if not is_possible:
+                continue
+
+            if a == b:
                 is_possible = False
-            dominoes.append((aa, bb))
-        if not is_possible:
+
+            if a not in edges:
+                edges[a] = [b]
+            else:
+                edges[a].append(b)
+                correct_numbers += 1
+                if len(edges[a]) > 2:
+                    is_possible = False
+            if b not in edges:
+                edges[b] = [a]
+            else:
+                edges[b].append(a)
+                correct_numbers += 1
+                if len(edges[b]) > 2:
+                    is_possible = False
+
+        if not is_possible or correct_numbers != n:
             print("NO")
             continue
 
-        good_result = determine_result(dominoes, 0,  BitSet(0), BitSet(0))
+        good_result = determine_result(n, edges)
         if good_result:
             print("YES")
         else:
