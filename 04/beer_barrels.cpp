@@ -10,8 +10,13 @@ int main(){
     else if (c != a && c != b) {
         std::cout << 0 << std::endl;
     }
+    else if (c == a && c == b) {
+        std::cout << k << std::endl;
+    }
     else{
-        std::cout << ((long long int)(std::pow((long long int)2, k) * k) / 2) % 1000000007 << std::endl;
+        long long int res = (long long int)(std::pow(2, k - 1)) % 1000000007;
+        res = (res * k) % 1000000007;
+        std::cout << res << std::endl;
     }
     return 0;
 }
