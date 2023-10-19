@@ -1,8 +1,11 @@
+
+
 def solve(setv: set, n: int):
     if len(setv) == 1:
         return 0
     if len(setv) == 2:
         return 1
+    og_setv = setv.copy()
     base = setv.pop()
     results = set()
     for vertex in setv:
@@ -11,7 +14,7 @@ def solve(setv: set, n: int):
         for vtx in setv:
             smv = (vtx[0] + vectorsm[0], vtx[1] + vectorsm[1])
             dtv = (vtx[0] + vectordt[0], vtx[1] + vectordt[1])
-            if smv not in setv and dtv not in setv:
+            if smv not in og_setv and dtv not in og_setv:
                 break
         else:
             if vectordt not in results and vectorsm not in results:
@@ -19,7 +22,6 @@ def solve(setv: set, n: int):
 
     return len(results)
 
-        
 
 if __name__ == "__main__":
     n = int(input())
