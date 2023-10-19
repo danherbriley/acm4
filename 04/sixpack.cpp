@@ -7,7 +7,7 @@
 std::vector<int> SUM_CNT = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1};  // SUM_CNT[idx] gives you the number of different ordered pairs (x, y) whose sum equals to idx
 
 
-long long int solve(const std::vector<std::pair<int, int>> & predefined, int n, int k, int curr_col, int last_col_sum, int last_last_col_sum, int res_cnt) {
+long long int solve(const std::vector<std::pair<int, int>> & predefined, int n, int k, int curr_col, int last_col_sum, int last_last_col_sum, long long int res_cnt) {
     if (curr_col == n) {
         return res_cnt % MOD;
     }
