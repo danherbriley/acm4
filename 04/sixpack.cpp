@@ -48,18 +48,18 @@ long long int solve(const std::vector<std::pair<int, int>> & predefined, int n, 
         if (last_last_col_sum != -1) {  // third to last column
             if (k - last_col_sum - last_last_col_sum < 0 || k - last_col_sum - last_last_col_sum > 18)
                 return 0;
-            return solve(predefined, n, k, curr_col + 1, k - last_col_sum - last_last_col_sum, last_col_sum, SUM_CNT[k - last_col_sum - last_last_col_sum] * res_cnt) % MOD;
+            return solve(predefined, n, k, curr_col + 1, k - last_col_sum - last_last_col_sum, last_col_sum, SUM_CNT[k - last_col_sum - last_last_col_sum] * res_cnt % MOD) % MOD;
         }
         else if (last_col_sum != -1) {  // second column
             long long int res = 0;
             for (int i = 0; i <= k - last_col_sum && i <= 18; ++i) {
-                res += solve(predefined, n, k, curr_col + 1, i, last_col_sum, SUM_CNT[i]*res_cnt) % MOD;
+                res += solve(predefined, n, k, curr_col + 1, i, last_col_sum, SUM_CNT[i]*res_cnt % MOD) % MOD;
             }
             return res;
         } else {  // first column
             long long int res = 0;
             for (int i = 0; i <= k && i <= 18; ++i) {
-                res += solve(predefined, n, k, curr_col + 1, i, last_col_sum, SUM_CNT[i]*res_cnt) % MOD;
+                res += solve(predefined, n, k, curr_col + 1, i, last_col_sum, SUM_CNT[i]*res_cnt % MOD) % MOD;
             }
             return res;
         }
