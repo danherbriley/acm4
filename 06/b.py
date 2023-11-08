@@ -1,13 +1,22 @@
 
 
-def solve(n: int):
-    valid = [(int(x), idx + 1) for idx, x in enumerate(input().split()) if int(x) < idx + 1]
+def solve(a: list):
+    valid = []
+    prefix = []
+    for idx, el in enumerate(a):
+        valid.append(bool(el < idx + 1))
+    for idx, el in enumerate(a):
+        if idx == 0:
+            prefix.append(int(valid[idx]))
+        else:
+            prefix.append(prefix[idx - 1] + int(valid[idx]))
 
     res = 0
-    for i in range(len(valid)):
-        for j in range(i + 1, len(valid)):
-            if valid[i][0] < valid[i][1] < valid[j][0] < valid[j][1]:
-                res += 1
+    for idx, el in enumerate(a):
+        if valid[idx]:
+            y = el - 2
+            if y >= 0:
+                res += prefix[y]
 
     print(res)
 
@@ -15,4 +24,5 @@ def solve(n: int):
 if __name__ == '__main__':
     for _ in range(int(input())):
         nn = int(input())
-        solve(nn)
+        aa = [int(x) for x in input().split()]
+        solve(aa)
